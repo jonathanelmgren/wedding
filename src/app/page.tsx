@@ -134,6 +134,7 @@ export default function Home() {
           <p>Bubbel och tilltugg kommer att finnas vid brudskålen. Till middagen fixar vi dryck, men till festen får ni ta med eget.</p>
           <h4>Övrigt</h4>
           <p>Vi älskar era barn men just denna dagen vill vi fira tillsammans med våra vuxna vänner.</p>
+          <p>Absolut ingen konfetti får vistas på området</p>
           <br />
           <p>Eventuella tal anmäls till vår toastmaster</p>
           <p>Peter Tornham: 0704 - 62 64 99</p>

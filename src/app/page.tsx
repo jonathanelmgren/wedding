@@ -182,8 +182,10 @@ export default function Home() {
               </div>
             </div>
             <input value={form.partySong} onChange={(e) => setForm({ ...form, partySong: e.target.value })} type="text" placeholder="Min absolut bästa partylåt" />
+            <div className='text-primary text-xl'>
+              {loading ? 'Laddar..' : message}
+            </div>
             <button type="submit" className='bg-primary px-2 py-1 rounded-md mt-2 text-white cursor-pointer'>Skicka</button>
-            {loading ? 'Laddar..' : message}
           </form>
         </ParallaxLayer>
       </Parallax>

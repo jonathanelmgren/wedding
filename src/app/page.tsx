@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <main>
-      <Parallax pages={4.3} style={{ top: '0', left: '0' }}>
+      <Parallax pages={5.4} style={{ top: '0', left: '0' }}>
         <ParallaxLayer
           offset={0}
           speed={0}
@@ -104,7 +104,7 @@ export default function Home() {
           className='bg-gradient-to-b from-transparent to-sky'
         />
         <ParallaxLayer
-          offset={1.8}
+          offset={1.95}
           factor={2}
           speed={0.3}
           className='z-10'
@@ -118,7 +118,7 @@ export default function Home() {
           <h4>Boende</h4>
           <p>Det finns ett flertal hotell och campingar i Mullsjö. Det är även nära till Jönköping (25min) om man vill ta sig dit istället. Eftersom det är högsäsong så kan det vara bra att boka boende så snart som möjligt.</p>
           <br />
-          <p>Ni har även möjlighet att ta med er husvagn, husbild eller tält för den delen och ställa upp på plats. (Obs! Ingen el)</p>
+          <p>Ni har även möjlighet att ta med er husvagn, husbil eller tält för den delen och ställa upp på plats. (Obs! Ingen el)</p>
           <br />
           <p>Här kommer ett par boenden i närheten:</p>
           <div className='width flex flex-col underline'>
@@ -137,10 +137,10 @@ export default function Home() {
           <p>Absolut ingen konfetti får vistas på området</p>
           <br />
           <p>Eventuella tal anmäls till vår toastmaster</p>
-          <p>Peter Tornham: 0704 - 62 64 99</p>
+          <p>Peter Tornham: <a href="mailto:peter.tornham@gmail.com">peter.tornham@gmail.com</a></p>
         </ParallaxLayer>
         <ParallaxLayer
-          offset={3}
+          offset={3.7}
           factor={2}
           speed={0.5}
           className='z-10'
@@ -157,9 +157,8 @@ export default function Home() {
           <p className='mt-5 text-center'>Vår vigsel har vi valt att hålla kort och endast för familj</p>
         </ParallaxLayer>
         <ParallaxLayer
-          offset={3.7}
+          offset={4.5}
           factor={1}
-          speed={0.1}
           className='z-20'
         >
           <h2 className='mb-0'>OSA</h2>

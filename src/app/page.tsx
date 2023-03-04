@@ -92,7 +92,7 @@ export default function Home() {
             <span className='block text-center text-2xl text-black'>15.07.23</span>
           </h2>
           <p>
-            Vi önskar er varmt välkomna till vår bröllopsfest den 15 juli med massvis av god mat och gott sällskap. Nedan hittar ni information om vår speciella dag, och glöm inte att OSA längst ner på hemsidan senast den 31 maj.
+            Vi önskar er varmt välkomna till vårt bröllop den 15 juli med massvis av god mat och gott sällskap. Nedan hittar ni information om vår speciella dag, och glöm inte att OSA längst ner på hemsidan senast den 31 maj oavsett om du kommer eller inte.
           </p>
           <br />
           <p>
@@ -111,14 +111,14 @@ export default function Home() {
         >
           <h2>Viktig info</h2>
           <h4>Plats</h4>
-          <p>Vi kommer att vistas på idylliska Näs Herrgård i Mullsjö <small>(Bjurbäck Näs 1, 565 92 Mullsjö)</small> under hela firandet. Vigseln kommer att hållas utomhus och festen kommer att hållas i ladan.</p>
+          <p>Vi kommer att vistas på idylliska Näs Herrgård i Mullsjö <small>(Bjurbäck Näs 1, 565 92 Mullsjö)</small> under hela bröllopet. Vigseln kommer att hållas utomhus och festen kommer att hållas i ladan.</p>
           <p>Eftersom det kan bli lite kallt på kvällen är det bra att ta med sig något varmare att ta på sig.</p>
           <h4>Gåvor</h4>
           <p>Istället för en bröllopsgåva vill vi gärna att ni unnar er en övernattning på ett närliggande boende så att vi kan fira tillsammans hela natten lång.</p>
           <h4>Boende</h4>
           <p>Det finns ett flertal hotell och campingar i Mullsjö. Det är även nära till Jönköping (25min) om man vill ta sig dit istället. Eftersom det är högsäsong så kan det vara bra att boka boende så snart som möjligt.</p>
           <br />
-          <p>Ni har även möjlighet att ta med er husvagn, husbil eller tält för den delen och ställa upp på plats. (Obs! Ingen el)</p>
+          <p>Ni har även möjlighet att ta med er husvagn, husbil eller tält för den delen och ställa upp på plats. (Obs! El kan eventuellt lösas med egen förlängningskabel)</p>
           <br />
           <p>Här kommer ett par boenden i närheten:</p>
           <div className='width flex flex-col underline'>
@@ -147,14 +147,14 @@ export default function Home() {
         >
           <h2>Schema</h2>
           <ul className='mx-auto max-w-[15rem] flex flex-col gap-2'>
-            <li className='flex items-center justify-between opacity-30'><Image src={ring} alt="ring" width='50' height='50' /> Vigsel</li>
-            <li className='flex items-center justify-between'><span>14.00</span> <span>Ankomst</span></li>
-            <li className='flex items-center justify-between'><span>15.00</span> <span>Brudskål & mingel</span></li>
+            <li className='flex items-center justify-between'><span>13.00</span> <span>Vigsel</span></li>
+            <li className='flex items-center justify-between'><span>14.00</span> <span>Mingel</span></li>
+            <li className='flex items-center justify-between'><span>15.00</span> <span>Brudskål</span></li>
             <li className='flex items-center justify-between'><span>17.00</span> <span>Middag</span></li>
             <li className='flex items-center justify-between'><span>20.00</span> <span>Tårta</span></li>
             <li className='flex items-center justify-between'><span>21.00</span> <span>FEST</span></li>
           </ul>
-          <p className='mt-5 text-center'>Vår vigsel har vi valt att hålla kort och endast för familj</p>
+          <p className='mt-5 text-center'>Kom gärna lite innan så ni hinner landa :)</p>
         </ParallaxLayer>
         <ParallaxLayer
           offset={4.5}

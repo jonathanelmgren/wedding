@@ -1,6 +1,7 @@
 'use client'
 import { useNearScreenBottom } from '@/hooks/useNearScreenBottom'
 import { getImages } from '@/utils/getImages'
+import { sendEventToGA } from '@/utils/sendEventToGA'
 import { useCallback, useEffect, useState } from 'react'
 import { WeddingImage } from 'ts/types'
 import ImageViewer from './ImageViewer/ImageViewer'
@@ -11,6 +12,10 @@ export const PaginatedImages = ({ user }: { user: string }) => {
     const [paginationToken, setPaginationToken] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(true);
     const nearBottom = useNearScreenBottom()
+
+    useEffect(() => {
+        sendEventToGA('pageview', 'Album', 'user', user)
+    }, [user])
 
     const fetchImages = useCallback(async () => {
         if (!paginationToken && images.length > 0) return

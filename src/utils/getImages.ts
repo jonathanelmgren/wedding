@@ -31,19 +31,20 @@ export const getImages = async (paginationToken?: string): Promise<{ pagination:
                 const { baseUrl, filename, mediaMetadata } = item
                 const { width, height } = mediaMetadata
                 const aspectRatio = parseFloat(width) / parseFloat(height)
-                const thumbnailWidth = 600
-                const thumbnailHeight = Math.round(thumbnailWidth / aspectRatio)
 
-                const fullWidth = parseInt(width)
-                const fullHeight = parseInt(height)
+                const fullSizeWidth = 1920
+                const thumbnailWidth = 600
+
+                const thumbnailHeight = Math.round(thumbnailWidth / aspectRatio)
+                const fullSizeHeight = Math.round(fullSizeWidth / aspectRatio)
                 return {
                     default: {
-                        url: `${baseUrl}=w${fullWidth}-h${fullHeight}`,
-                        width: fullWidth,
-                        height: fullHeight,
+                        url: `${baseUrl}=w${fullSizeWidth}`,
+                        width: fullSizeWidth,
+                        height: fullSizeHeight,
                     },
                     thumbnail: {
-                        url: `${baseUrl}=w${thumbnailWidth}-h${thumbnailHeight}`,
+                        url: `${baseUrl}=w${thumbnailWidth}`,
                         width: thumbnailWidth,
                         height: thumbnailHeight
                     },

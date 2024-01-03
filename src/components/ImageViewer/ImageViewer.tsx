@@ -48,10 +48,10 @@ const ImageViewer: React.FC<{ img: WeddingImage, user: string }> = ({ img, user 
                         <Image
                             src={img.default.url}
                             alt="Full Size"
-                            layout="fill"
-                            objectFit="contain"
+                            width={img.default.width}
+                            height={img.default.height}
                             onLoad={handleModalOnLoad}
-                            style={{ opacity: modalLoading ? 0 : 1 }}
+                            style={{ opacity: modalLoading ? 0 : 1, objectFit: 'contain' }}
                             onError={closeModal}
                         />
                     </div>

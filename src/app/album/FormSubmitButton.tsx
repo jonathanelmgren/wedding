@@ -3,7 +3,6 @@ import { uploadImages } from '@/utils/uploadImages';
 import { useFormState, useFormStatus } from 'react-dom';
 
 const handleFormAction = async (_prevState: any, formData: FormData) => {
-    return false
     return await uploadImages(formData)
 }
 

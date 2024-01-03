@@ -22,7 +22,7 @@ const Page = () => {
             <div className="absolute inset-0 -z-10 opacity-20" style={{ backgroundImage: 'url("/images/clouds.png")' }}></div>
 
             <h1 className="text-center text-8xl text-primary mt-20">Album</h1>
-            <p className="text-center">Om ni vill ta bort någon bild så kontakta Jonathan</p>
+            <p className="text-center">Om ni vill ta bort en bild, eller vill ha en bild med orginalkvalité så kontakta Jonathan</p>
             <form className="flex flex-col items-center justify-center w-full gap-4 mt-4">
                 <FileUploadInput />
                 <FormSubmitButton />

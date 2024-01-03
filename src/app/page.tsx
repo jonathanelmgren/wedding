@@ -1,14 +1,12 @@
 'use client'
-import './globals.css'
-import { useState } from 'react'
-import Image from 'next/image'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
+import Image from 'next/image'
 import Link from 'next/link'
-import logo from '../../public/images/logo.png'
+import { useState } from 'react'
 import balloon1 from '../../public/images/balloon1.png'
 import balloon2 from '../../public/images/balloon2.png'
 import heartballoon from '../../public/images/heartballoon.png'
-import ring from '../../public/images/ring.png'
+import logo from '../../public/images/logo.png'
 interface form {
   namn: string | undefined,
   plusOne: boolean,
@@ -60,6 +58,9 @@ export default function Home() {
           className='grid place-content-center opacity-0 animate-fade-in animation-delay-500'
         >
           <Image className='cover-contain' width={'250'} height={'250'} src={logo} alt='alt' />
+          <a className='mt-6 text-center border-lime-900 hover:border-opacity-70 border-2 p-2 border-opacity-40' href="/album">
+            Album
+          </a>
         </ParallaxLayer>
         <ParallaxLayer
           offset={1}

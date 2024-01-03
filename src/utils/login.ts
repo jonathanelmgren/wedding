@@ -4,32 +4,37 @@ import { redirect } from 'next/navigation';
 import data from 'users.json';
 
 export const login = (formData: FormData) => {
-    const cookiesStorage = cookies();
+    try {
 
-    const token = formData.get('token')?.toString()
-    if (!token) throw new Error('No token provided');
+        const cookiesStorage = cookies();
 
-    const users: Record<string, string> = data
+        const token = formData.get('token')?.toString()
+        if (!token) throw new Error('No token provided');
 
-    if (!isValidToken(token)) throw new Error('Invalid token')
+        const users: Record<string, string> = data
 
-    const username = Object.keys(users).find((key) => users[key] === token)
-    if (!username) throw new Error('Invalid token')
+        if (!isValidToken(token)) throw new Error('Invalid token')
 
-    cookiesStorage.set({
-        name: 'token',
-        value: token,
-        httpOnly: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-        secure: true
-    })
-    cookiesStorage.set({
-        name: 'user',
-        value: username,
-        httpOnly: false,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-    })
-    redirect('/album')
+        const username = Object.keys(users).find((key) => users[key] === token)
+        if (!username) throw new Error('Invalid token')
+
+        cookiesStorage.set({
+            name: 'token',
+            value: token,
+            httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+            secure: true
+        })
+        cookiesStorage.set({
+            name: 'user',
+            value: username,
+            httpOnly: false,
+            expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+        })
+        redirect('/album')
+    } catch (e) {
+        redirect('/login?error=invalid_token')
+    }
 }
 
 export const isValidToken = (token: string) => {

@@ -1,4 +1,4 @@
-import { Quicksand } from '@next/font/google'
+import { Quicksand } from "next/font/google"
 import Script from 'next/script'
 import './globals.css'
 

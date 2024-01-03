@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { WeddingImage } from 'ts/types';
 import Spinner from './Spinner';
 
-const ImageViewer: React.FC<{ img: WeddingImage }> = ({ img }) => {
+const ImageViewer: React.FC<{ img: WeddingImage, user: string }> = ({ img, user }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLoading, setModalLoading] = useState(true);
     const [loading, setLoading] = useState(true);
 
     const openModal = async () => {
-        sendEventToGA('click', 'Image', 'Open', img.filename);
+        sendEventToGA('click', 'Image', user, img.filename);
         setIsModalOpen(true);
     };
     const closeModal = () => setIsModalOpen(false);

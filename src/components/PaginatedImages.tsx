@@ -6,7 +6,7 @@ import { WeddingImage } from 'ts/types'
 import ImageViewer from './ImageViewer/ImageViewer'
 import Spinner from './ImageViewer/Spinner'
 
-export const PaginatedImages = () => {
+export const PaginatedImages = ({ user }: { user: string }) => {
     const [images, setImages] = useState<WeddingImage[]>([])
     const [paginationToken, setPaginationToken] = useState<string | undefined>(undefined);
     const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ export const PaginatedImages = () => {
 
     return (
         <>
-            {images.map((img) => <ImageViewer key={img.filename} img={img} />)}
+            {images.map((img) => <ImageViewer user={user} key={img.filename} img={img} />)}
             {loading &&
                 <Spinner className='w-[10vw]' />
             }

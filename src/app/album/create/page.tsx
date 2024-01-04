@@ -18,7 +18,6 @@ const Page = async ({ searchParams }: { searchParams: { album: string } }) => {
         }
     })
     const json = await res.json()
-    console.log(json)
     return (
         <div className="relative min-h-screen">
             {JSON.stringify(json)}

@@ -1,9 +1,10 @@
 'use client'
 
+import { sendEventToGA } from '@/utils/sendEventToGA';
 import { upload } from '@vercel/blob/client';
 import { useRef, useState } from 'react';
 
-export const FileUploadForm = () => {
+export const FileUploadForm = ({ user }: { user: string }) => {
     const inputFileRef = useRef<HTMLInputElement>(null);
     const [files, setFiles] = useState<FileList | null>(null)
     const [loading, setLoading] = useState(false)
@@ -21,13 +22,15 @@ export const FileUploadForm = () => {
         <form onSubmit={async (event) => {
             event.preventDefault();
 
-            setLoading(true);
 
             const files = inputFileRef?.current?.files;
 
             if (!files) return;
 
             if (files.length === 0) return;
+            setLoading(true);
+
+            sendEventToGA('submit', 'file-upload', 'upload', user)
 
             let success = 0;
             let failed = 0;

@@ -25,7 +25,8 @@ export const FileUploadForm = () => {
                 });
             }
 
-        }}>
+        }}
+            className="flex flex-col items-center justify-center w-full gap-4 mt-4">
             <label htmlFor="dropzone-file" className="px-10 py-8 relative flex flex-col items-center justify-center border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                 <div className="flex flex-col items-center justify-center">
                     <div className="flex items-center">
@@ -42,10 +43,10 @@ export const FileUploadForm = () => {
                         <p className="text-xs absolute right-0 bottom-2 text-gray-500 dark:text-gray-400">Du laddar upp {files?.length} filer</p>
                     }
                 </div>
-                <input onChange={handleFileChange} multiple id="dropzone-file" type="file" name="files" className="hidden" />
+                <input ref={inputFileRef} onChange={handleFileChange} multiple id="dropzone-file" type="file" name="files" className="hidden" />
             </label>
             <div className='flex flex-col gap-4 items-center justify-center'>
-                <button className="text-center bg-primary px-4 py-2 text-white">{'Skicka'}</button>
+                <button type="submit" className="text-center bg-primary px-4 py-2 text-white">{'Skicka'}</button>
             </div>
         </form>
     )

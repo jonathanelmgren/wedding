@@ -1,7 +1,7 @@
 "use server"
+import { PAGE_SIZE } from '@/components/ServerSideImages';
 import { GoogleImagesResponse, WeddingImage } from 'ts/types';
 import { refreshAccessToken } from './googleAuth';
-
 
 export const getImages = async (paginationToken?: string): Promise<{ pagination: string, images: WeddingImage[] } | undefined> => {
     const accessToken = await refreshAccessToken()
@@ -14,7 +14,7 @@ export const getImages = async (paginationToken?: string): Promise<{ pagination:
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            pageSize: 100,
+            pageSize: PAGE_SIZE,
             albumId: "AJlFrfE6jO76279Rk8zWTol7JALJ480J0ppT21ItC7MWA42cSAfGTAxBPIdDDEFU6g22_OIQEsoN",
             ...paginationToken && { pageToken: paginationToken }
         }),

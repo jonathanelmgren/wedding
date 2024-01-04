@@ -58,7 +58,6 @@ export const FileUploadForm = ({ user }: { user: string }) => {
                 setStateMessage(`${success} filer laddades upp men ${failed} filer misslyckades.`)
             }
             setLoading(false);
-            //setFiles(null);
             inputFileRef?.current?.form?.reset();
         }}
             className="flex flex-col items-center justify-center w-full gap-4 mt-4">

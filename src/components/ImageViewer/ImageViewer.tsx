@@ -1,11 +1,17 @@
 'use client'
 import { sendEventToGA } from '@/utils/sendEventToGA';
+import { useIntersectionObserver } from '@uidotdev/usehooks';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { WeddingImage } from 'ts/types';
 import Spinner from './Spinner';
 
-const ImageViewer: React.FC<{ img: WeddingImage, user: string }> = ({ img, user }) => {
+const ImageViewer: React.FC<{ priority: boolean, img: WeddingImage, user: string, setVisibleImage: React.Dispatch<React.SetStateAction<WeddingImage | undefined>> }> = ({ img, priority, user, setVisibleImage }) => {
+    const [ref, entry] = useIntersectionObserver({
+        threshold: 1,
+        root: null,
+        rootMargin: '0px', // Reduce the bottom side of the viewport by 50%
+    });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLoading, setModalLoading] = useState(true);
     const [loading, setLoading] = useState(true);
@@ -18,10 +24,16 @@ const ImageViewer: React.FC<{ img: WeddingImage, user: string }> = ({ img, user 
     const handleModalOnLoad = () => setModalLoading(false);
     const handleOnLoad = () => setLoading(false);
 
+    useEffect(() => {
+        if (entry?.isIntersecting) {
+            setVisibleImage(img)
+        }
+    }, [entry, img, setVisibleImage])
+
     return (
-        <div data-file-name={img.filename}>
+        <div id={img.filename} data-file-name={img.filename} ref={ref}>
             {loading &&
-                <div className='flex items-center justify-center'>
+                <div className='flex items-center justify-center' style={{ width: img.thumbnail.width, height: img.thumbnail.height }}>
                     <Spinner className='w-[70px] aspect-square' />
                 </div>
             }
@@ -34,6 +46,7 @@ const ImageViewer: React.FC<{ img: WeddingImage, user: string }> = ({ img, user 
                 className='cursor-pointer'
                 style={{ opacity: loading ? 0 : 1 }}
                 onLoad={handleOnLoad}
+                priority={priority}
             />
 
             {isModalOpen && (

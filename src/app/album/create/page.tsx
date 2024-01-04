@@ -1,9 +1,11 @@
 import { refreshAccessToken } from "@/utils/googleAuth"
+import { notFound } from "next/navigation"
 
-const Page = async () => {
+const Page = async ({ searchParams }: { searchParams: { album: string } }) => {
+    if (!searchParams.album) notFound()
     const body = {
         album: {
-            title: 'wedding-guest-uploads'
+            title: searchParams.album
         }
     }
     const token = await refreshAccessToken()

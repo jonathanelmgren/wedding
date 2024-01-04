@@ -10,9 +10,7 @@ export async function POST(request: Request): Promise<NextResponse> {
       request,
       onBeforeGenerateToken: async () => {
  
-        return {
-          allowedContentTypes: ['image/*'],
-        };
+        return {};
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
         // Get notified of client upload completion

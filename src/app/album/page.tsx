@@ -1,8 +1,7 @@
 import { PaginatedImages } from "@/components/PaginatedImages"
 import { cookies } from 'next/headers'
 import { redirect } from "next/navigation"
-import { FileUploadInput } from "./FileUploadInput"
-import { FormSubmitButton } from "./FormSubmitButton"
+import { FileUploadForm } from "./FileUploadForm"
 
 const Page = () => {
     const cookieStore = cookies()
@@ -23,10 +22,7 @@ const Page = () => {
 
             <h1 className="text-center text-8xl text-primary mt-20">Album</h1>
             <p className="text-center">Om ni vill ta bort en bild, eller vill ha en bild med orginalkvalité så kontakta Jonathan</p>
-            <form className="flex flex-col items-center justify-center w-full gap-4 mt-4">
-                <FileUploadInput />
-                <FormSubmitButton />
-            </form>
+            <FileUploadForm />
             <div className="z-0 mx-auto w-full flex flex-col items-center gap-8 m-12 ">
                 <PaginatedImages user={user} />
             </div>

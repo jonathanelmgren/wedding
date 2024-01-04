@@ -6,6 +6,9 @@ import { useRef, useState } from 'react';
 export const FileUploadForm = () => {
     const inputFileRef = useRef<HTMLInputElement>(null);
     const [files, setFiles] = useState<FileList | null>(null)
+    const [loading, setLoading] = useState(false)
+    const [stateMessage, setStateMessage] = useState<string | undefined>(undefined)
+    const [currentFileIndex, setCurrentFileIndex] = useState(1)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -16,15 +19,38 @@ export const FileUploadForm = () => {
         <form onSubmit={async (event) => {
             event.preventDefault();
 
-            const file = inputFileRef?.current?.files?.[0];
+            setLoading(true);
 
-            if (file) {
-                await upload(file.name, file, {
-                    access: 'public',
-                    handleUploadUrl: '/api/upload',
-                });
+            const files = inputFileRef?.current?.files;
+
+            if (!files) return;
+
+            let success = 0;
+            let failed = 0;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files.item(i);
+
+                if (file) {
+                    setCurrentFileIndex(i + 1);
+                    try {
+                        await upload(file.name, file, {
+                            access: 'public',
+                            handleUploadUrl: '/api/upload',
+                        });
+                        success++;
+                    } catch (e) {
+                        failed++;
+                    }
+                }
             }
 
+            if (failed === 0) {
+                setStateMessage(`Alla ${success} filer laddades upp!`)
+            } else {
+                setStateMessage(`${success} filer laddades upp men ${failed} filer misslyckades.`)
+            }
+            setLoading(false);
         }}
             className="flex flex-col items-center justify-center w-full gap-4 mt-4">
             <label htmlFor="dropzone-file" className="px-10 py-8 relative flex flex-col items-center justify-center border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -46,7 +72,10 @@ export const FileUploadForm = () => {
                 <input ref={inputFileRef} onChange={handleFileChange} multiple id="dropzone-file" type="file" name="files" className="hidden" />
             </label>
             <div className='flex flex-col gap-4 items-center justify-center'>
-                <button type="submit" className="text-center bg-primary px-4 py-2 text-white">{'Skicka'}</button>
+                <button type="submit" className="text-center bg-primary px-4 py-2 text-white">{loading ? `Laddar upp ${currentFileIndex} av ${files?.length}...` : 'Skicka'}</button>
+                {stateMessage &&
+                    <p>{stateMessage}</p>
+                }
             </div>
         </form>
     )

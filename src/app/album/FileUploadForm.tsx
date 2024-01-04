@@ -27,6 +27,8 @@ export const FileUploadForm = () => {
 
             if (!files) return;
 
+            if (files.length === 0) return;
+
             let success = 0;
             let failed = 0;
 

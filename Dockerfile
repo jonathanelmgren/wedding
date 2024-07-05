@@ -21,8 +21,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Copy .env file
-COPY .env .env
+# Set build arguments
+ARG REFRESH_TOKEN
+ARG CLIENT_ID
+ARG CLIENT_SECRET
+
+# Set environment variables
+ENV REFRESH_TOKEN=$REFRESH_TOKEN
+ENV CLIENT_ID=$CLIENT_ID
+ENV CLIENT_SECRET=$CLIENT_SECRET
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry

@@ -1,18 +1,18 @@
 steps:
-  # Access secrets and create a .env file
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        echo "REFRESH_TOKEN=$$REFRESH_TOKEN" >> .env
-        echo "CLIENT_ID=$$CLIENT_ID" >> .env
-        echo "CLIENT_SECRET=$$CLIENT_SECRET" >> .env
-    secretEnv: ['REFRESH_TOKEN', 'CLIENT_ID', 'CLIENT_SECRET']
-
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/wedding-planner-app', '.']
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/wedding-planner-app'
+      - '--build-arg'
+      - 'REFRESH_TOKEN=${_REFRESH_TOKEN}'
+      - '--build-arg'
+      - 'CLIENT_ID=${_CLIENT_ID}'
+      - '--build-arg'
+      - 'CLIENT_SECRET=${_CLIENT_SECRET}'
+      - '.'
+    secretEnv: ['_REFRESH_TOKEN', '_CLIENT_ID', '_CLIENT_SECRET']
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -40,8 +40,8 @@ images:
 availableSecrets:
   secretManager:
     - versionName: projects/wedding-410109/secrets/REFRESH_TOKEN/versions/latest
-      env: 'REFRESH_TOKEN'
+      env: '_REFRESH_TOKEN'
     - versionName: projects/wedding-410109/secrets/CLIENT_ID/versions/latest
-      env: 'CLIENT_ID'
+      env: '_CLIENT_ID'
     - versionName: projects/wedding-410109/secrets/CLIENT_SECRET/versions/latest
-      env: 'CLIENT_SECRET'
+      env: '_CLIENT_SECRET'

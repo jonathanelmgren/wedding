@@ -3,6 +3,14 @@ import { OAuth2Client } from "google-auth-library";
 
 const isDev = process.env.NODE_ENV === "development";
 
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
+const refreshToken = process.env.REFRESH_TOKEN;
+
+if (!clientId || !clientSecret || !refreshToken) {
+  throw new Error("Missing environment variables");
+}
+
 const client = new OAuth2Client({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,

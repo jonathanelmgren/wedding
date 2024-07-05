@@ -1,17 +1,17 @@
-import { Quicksand } from "next/font/google"
-import Script from 'next/script'
-import './globals.css'
+import { Quicksand } from "next/font/google";
+import Script from "next/script";
+import "./globals.css";
 
 const quicksand = Quicksand({
-  display: 'swap',
-  weight: '400',
-  subsets: ['latin']
-})
+  display: "swap",
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html className={quicksand.className} lang="en">
@@ -38,5 +38,5 @@ export default function RootLayout({
       </head>
       <body>{children}</body>
     </html>
-  )
+  );
 }

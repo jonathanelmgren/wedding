@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-    --color-primary: #7fb236;
-    --color-sky: #fff;
+  --color-primary: #7fb236;
+  --color-sky: #fff;
 }
 
 h1,
@@ -13,50 +13,50 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'cinque-donne-pro', serif;
-    font-weight: 400;
-    font-style: normal;
+  font-family: "cinque-donne-pro", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @layer base {
-    h2 {
-        @apply text-6xl text-center text-primary mb-4;
-    }
-    h4 {
-        @apply text-3xl text-left mx-auto text-primary mt-5 max-w-md px-4;
-    }
-    p {
-        @apply mx-auto max-w-md px-4;
-    }
-    .width {
-        @apply mx-auto max-w-md px-4;
-    }
+  h2 {
+    @apply text-6xl text-center text-primary mb-4;
+  }
+  h4 {
+    @apply text-3xl text-left mx-auto text-primary mt-5 max-w-md px-4;
+  }
+  p {
+    @apply mx-auto max-w-md px-4;
+  }
+  .width {
+    @apply mx-auto max-w-md px-4;
+  }
 
-    input {
-      @apply border-primary border rounded-md px-3 py-1
-    }
+  input {
+    @apply border-primary border rounded-md px-3 py-1;
+  }
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @layer utilities {
-    .animation-delay-75 {
-        animation-delay: 75ms;
-    }
-    .animation-delay-500 {
-        animation-delay: 500ms;
-    }
-    .animation-delay-1000 {
-        animation-delay: 1s;
-    }
-    .animation-delay-1500 {
-        animation-delay: 1500ms;
-    }
+  .animation-delay-75 {
+    animation-delay: 75ms;
+  }
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+  .animation-delay-1500 {
+    animation-delay: 1500ms;
+  }
 }

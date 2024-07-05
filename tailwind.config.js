@@ -6,13 +6,13 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        'fade-in': 'fadeIn 2000ms linear forwards'
+        "fade-in": "fadeIn 2000ms linear forwards",
       },
       colors: {
-        primary: 'var(--color-primary)',
-        sky: 'var(--color-sky)',
-      }
+        primary: "var(--color-primary)",
+        sky: "var(--color-sky)",
+      },
     },
   },
   plugins: [],
-}
+};

@@ -26,22 +26,6 @@ export default function Home() {
     food: "",
   });
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await fetch("/api/sendmail?form=" + JSON.stringify(form));
-      if (res.ok) {
-        setMessage("Tack för din OSA :)");
-      } else {
-        throw new Error("Nope");
-      }
-    } catch (e) {
-      setMessage("Något gick fel");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <main>
@@ -221,7 +205,7 @@ export default function Home() {
           <span className="block mb-4 text-center text-md text-black">
             Senast 31 maj
           </span>
-          <form className="width grid gap-3" onSubmit={onSubmit}>
+          <form className="width grid gap-3">
             <input
               value={form.namn}
               onChange={(e) => setForm({ ...form, namn: e.target.value })}
@@ -286,9 +270,10 @@ export default function Home() {
             </div>
             <button
               type="submit"
+              disabled
               className="bg-primary px-2 py-1 rounded-md mt-2 text-white cursor-pointer"
             >
-              Skicka
+              Vi har redan gift oss :)
             </button>
           </form>
         </ParallaxLayer>

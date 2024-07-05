@@ -62,7 +62,9 @@ const fetchImagesPage = async (
 
         const thumbnailHeight = Math.round(thumbnailWidth / aspectRatio);
         const fullSizeHeight = Math.round(fullSizeWidth / aspectRatio);
-        const thumbnailDesktopHeight = Math.round(thumbnailDesktopWidth / aspectRatio);
+        const thumbnailDesktopHeight = Math.round(
+          thumbnailDesktopWidth / aspectRatio,
+        );
         return {
           default: {
             url: `${baseUrl}=w${fullSizeWidth}`,

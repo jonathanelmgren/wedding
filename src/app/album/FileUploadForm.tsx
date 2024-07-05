@@ -1,69 +1,109 @@
 "use client";
 
 import { sendEventToGA } from "@/utils/sendEventToGA";
-import { upload } from "@vercel/blob/client";
+import { uploadImages } from "@/utils/uploadImages";
 import { useRef, useState } from "react";
+import { useFormStatus } from "react-dom";
+
+const photoExtensions = [
+  "avif",
+  "bmp",
+  "gif",
+  "heic",
+  "ico",
+  "jpg",
+  "jpeg",
+  "png",
+  "tiff",
+  "webp",
+  "raw",
+];
+const videoExtensions = [
+  "3gp",
+  "3g2",
+  "asf",
+  "avi",
+  "divx",
+  "m2t",
+  "m2ts",
+  "m4v",
+  "mkv",
+  "mmv",
+  "mod",
+  "mov",
+  "mp4",
+  "mpg",
+  "mts",
+  "tod",
+  "wmv",
+];
+
+const isValidFileType = (file: File) => {
+  const extension = file.name.split(".").pop()?.toLowerCase();
+  return (
+    photoExtensions.includes(extension!) || videoExtensions.includes(extension!)
+  );
+};
+
+const isValidFileSize = (file: File) => {
+  const extension = file.name.split(".").pop()?.toLowerCase();
+  if (photoExtensions.includes(extension!)) {
+    return file.size <= 200 * 1024 * 1024; // 200 MB
+  }
+  if (videoExtensions.includes(extension!)) {
+    return file.size <= 20 * 1024 * 1024; // 20 GB
+  }
+  return false;
+};
 
 export const FileUploadForm = ({ user }: { user: string }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<FileList | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [stateMessage, setStateMessage] = useState<string | undefined>(
-    undefined,
-  );
-  const [currentFileIndex, setCurrentFileIndex] = useState(1);
+  const [stateMessage, setStateMessage] = useState<string>("");
+  const [largeFilesWarning, setLargeFilesWarning] = useState<string>("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFiles(e.target.files);
-    } else {
-      setFiles(null);
-    }
-  };
-  return (
-    <form
-      onSubmit={async (event) => {
-        event.preventDefault();
-
-        const files = inputFileRef?.current?.files;
-
-        if (!files) return;
-
-        if (files.length === 0) return;
-        setLoading(true);
-
-        sendEventToGA("submit", "file-upload", "upload", user);
-
-        let success = 0;
-        let failed = 0;
-
-        for (let i = 0; i < files.length; i++) {
-          const file = files.item(i);
-
-          if (file) {
-            setCurrentFileIndex(i + 1);
-            try {
-              await upload(file.name, file, {
-                access: "public",
-                handleUploadUrl: "/api/upload",
-              });
-              success++;
-            } catch (e) {
-              failed++;
-            }
+      const dataTransfer = new DataTransfer();
+      let largeFileWarningMsg = "";
+      Array.from(e.target.files).forEach((file) => {
+        if (isValidFileType(file) && isValidFileSize(file)) {
+          dataTransfer.items.add(file);
+          if (file.size > 50 * 1024 * 1024) {
+            largeFileWarningMsg += `${file.name} är över 50MB och kan vara långsam att ladda upp. `;
           }
         }
+      });
+      if (dataTransfer.files.length !== e.target.files.length) {
+        setStateMessage(
+          "Några filer har antingen fel filtyp eller är för stor.",
+        );
+      }
+      setFiles(dataTransfer.files);
+      setLargeFilesWarning(largeFileWarningMsg);
+    } else {
+      setFiles(null);
+      setLargeFilesWarning("");
+    }
+  };
 
-        if (failed === 0) {
-          setStateMessage(`Alla ${success} filer laddades upp!`);
-        } else {
-          setStateMessage(
-            `${success} filer laddades upp men ${failed} filer misslyckades.`,
-          );
-        }
-        setLoading(false);
-        inputFileRef?.current?.form?.reset();
-      }}
+  const formAction = async (formData: FormData) => {
+    sendEventToGA("submit", "file-upload", "upload", user);
+    const { failureCount, successCount } = await uploadImages(formData);
+    if (failureCount === 0) {
+      setStateMessage(`Allt laddades upp korrekt`);
+    } else if (successCount === 0) {
+      setStateMessage(`Något gick fel. Kunde ej ladda upp media`);
+    } else {
+      setStateMessage(
+        `${successCount} media uppladdade, ${failureCount} media kunde ej laddas upp`,
+      );
+    }
+  };
+
+  return (
+    <form
+      action={formAction}
       className="flex flex-col items-center justify-center w-full gap-4 mt-4"
     >
       <label
@@ -89,7 +129,7 @@ export const FileUploadForm = ({ user }: { user: string }) => {
             </svg>
             <div>
               <p className="text-sm text-gray-500">
-                Klicka för att ladda upp egna bilder
+                Klicka för att ladda upp egna bilder och filmer
               </p>
               <p className="text-sm text-gray-500">
                 Du kan ladda upp flera på samma gång
@@ -113,18 +153,27 @@ export const FileUploadForm = ({ user }: { user: string }) => {
           className="hidden"
         />
       </label>
+      {largeFilesWarning && (
+        <p className="text-xs text-yellow-600">{largeFilesWarning}</p>
+      )}
       <div className="flex flex-col gap-4 items-center justify-center">
-        <button
-          disabled={loading}
-          type="submit"
-          className="text-center bg-primary px-4 py-2 text-white"
-        >
-          {loading
-            ? `Laddar upp ${currentFileIndex} av ${files?.length}...`
-            : "Skicka"}
-        </button>
-        {stateMessage && <p>{stateMessage}</p>}
+        <SubmitButton />
       </div>
+      {stateMessage && <p>{stateMessage}</p>}
     </form>
+  );
+};
+
+const SubmitButton = () => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      disabled={pending}
+      type="submit"
+      className="text-center bg-primary px-4 py-2 text-white"
+    >
+      {pending ? `Laddar upp media...` : "Skicka"}
+    </button>
   );
 };

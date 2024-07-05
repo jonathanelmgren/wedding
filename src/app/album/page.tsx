@@ -62,11 +62,7 @@ const ImageFetcher = async ({ user }: { user: string }) => {
   }
 
   return imgResponse.map((img) => (
-    <div
-      key={img.filename}
-      data-filename={img.filename}
-      className="px-4"
-    >
+    <div key={img.filename} data-filename={img.filename} className="px-4">
       <ImageComponent img={img} user={user} />
     </div>
   ));

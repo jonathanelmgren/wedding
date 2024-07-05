@@ -40,7 +40,7 @@ const Page = () => {
               orginalkvalité så kontakta Jonathan
             </p>
             <FileUploadForm user={user} />
-            <div className="z-0 mx-auto w-full flex flex-col items-center gap-8 m-12 max-w-[600px] scroll-smooth">
+            <div className="z-0 mx-auto w-full flex flex-col items-center gap-8 m-12 scroll-smooth">
               <AutoScrollButton />
               <Suspense fallback={<>Laddar alla bilder....</>}>
                 <ImageFetcher user={user} />
@@ -65,7 +65,7 @@ const ImageFetcher = async ({ user }: { user: string }) => {
     <div
       key={img.filename}
       data-filename={img.filename}
-      style={{ width: img.thumbnail.width, height: img.thumbnail.height }}
+      className="px-4"
     >
       <ImageComponent img={img} user={user} />
     </div>

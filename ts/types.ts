@@ -30,5 +30,10 @@ export type WeddingImage = {
     width: number;
     height: number;
   };
+  thumbnailDesktop: {
+    url: string;
+    width: number;
+    height: number;
+  };
   filename: string;
 };

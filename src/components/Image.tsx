@@ -1,6 +1,6 @@
 "use client";
 import { sendEventToGA } from "@/utils/sendEventToGA";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
 import { WeddingImage } from "ts/types";
 import { useLastViewed } from "./LastViewedProvider";
@@ -16,27 +16,44 @@ const Image = ({ img, user }: { img: WeddingImage; user: string }) => {
   const [fullSizeLoaded, setFullSizeLoaded] = useState(false);
   const { updateImageLoaded } = useLastViewed();
 
+  useEffect(() => {
+    if (fullSize) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [fullSize]);
+
   const handleClick = () => {
     sendEventToGA("image|click", user, "filename", img.filename);
     setFullSize(true);
   };
 
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFullSize(false);
+  };
+
   return (
     <>
       <img
-        className="cursor-pointer"
+        className="cursor-pointer w-full"
         onClick={handleClick}
         src={img.thumbnail.url}
-        width={img.thumbnail.width}
-        height={img.thumbnail.height}
+        srcSet={`${img.thumbnail.url} 480w, ${img.thumbnailDesktop.url} 1024w`}
+        sizes="(max-width: 600px) 480px, 1024px"
         alt={"alt"}
         loading="lazy"
         onLoad={() => updateImageLoaded()}
       />
       {fullSize && (
-        <div className="bg-black bg-opacity-40 fixed inset-0 flex items-center justify-center w-full h-full" onClick={() => setFullSize(false)}>
+        <div className="bg-black bg-opacity-40 fixed inset-0 flex items-center justify-center w-full h-full z-50" onClick={handleClose}>
           {!fullSizeLoaded && (
-              <Spinner />
+            <Spinner />
           )}
           <img
             className={fullSizeLoaded ? "block max-w-full max-h-full object-contain" : "hidden"}

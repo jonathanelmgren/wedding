@@ -58,9 +58,11 @@ const fetchImagesPage = async (
 
         const fullSizeWidth = 1920;
         const thumbnailWidth = 600;
+        const thumbnailDesktopWidth = 1200;
 
         const thumbnailHeight = Math.round(thumbnailWidth / aspectRatio);
         const fullSizeHeight = Math.round(fullSizeWidth / aspectRatio);
+        const thumbnailDesktopHeight = Math.round(thumbnailDesktopWidth / aspectRatio);
         return {
           default: {
             url: `${baseUrl}=w${fullSizeWidth}`,
@@ -71,6 +73,11 @@ const fetchImagesPage = async (
             url: `${baseUrl}=w${thumbnailWidth}`,
             width: thumbnailWidth,
             height: thumbnailHeight,
+          },
+          thumbnailDesktop: {
+            url: `${baseUrl}=w${thumbnailDesktopWidth}`,
+            width: thumbnailDesktopWidth,
+            height: thumbnailDesktopHeight,
           },
           filename,
         };

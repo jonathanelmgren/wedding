@@ -1,22 +1,16 @@
 steps:
-  # Distinctive step to verify cloudbuild.yaml is being read
-  - name: 'gcr.io/cloud-builders/echo'
-    args: ['CLOUDBUILD_YAML_IS_BEING_READ']
-
-  # Build the container image
+  # Access secrets and pass them as build args
   - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
     args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/wedding-planner-app'
-      - '--build-arg'
-      - 'REFRESH_TOKEN=${_REFRESH_TOKEN}'
-      - '--build-arg'
-      - 'CLIENT_ID=${_CLIENT_ID}'
-      - '--build-arg'
-      - 'CLIENT_SECRET=${_CLIENT_SECRET}'
-      - '.'
-    secretEnv: ['_REFRESH_TOKEN', '_CLIENT_ID', '_CLIENT_SECRET']
+      - '-c'
+      - |
+        docker build \
+          --build-arg REFRESH_TOKEN="$${REFRESH_TOKEN}" \
+          --build-arg CLIENT_ID="$${CLIENT_ID}" \
+          --build-arg CLIENT_SECRET="$${CLIENT_SECRET}" \
+          -t gcr.io/$PROJECT_ID/wedding-planner-app .
+    secretEnv: ['REFRESH_TOKEN', 'CLIENT_ID', 'CLIENT_SECRET']
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
@@ -44,8 +38,8 @@ images:
 availableSecrets:
   secretManager:
     - versionName: projects/wedding-410109/secrets/REFRESH_TOKEN/versions/latest
-      env: '_REFRESH_TOKEN'
+      env: 'REFRESH_TOKEN'
     - versionName: projects/wedding-410109/secrets/CLIENT_ID/versions/latest
-      env: '_CLIENT_ID'
+      env: 'CLIENT_ID'
     - versionName: projects/wedding-410109/secrets/CLIENT_SECRET/versions/latest
-      env: '_CLIENT_SECRET'
+      env: 'CLIENT_SECRET'

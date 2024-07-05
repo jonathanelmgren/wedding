@@ -26,7 +26,6 @@ export default function Home() {
     food: "",
   });
 
-
   return (
     <main>
       <Parallax pages={5.4} style={{ top: "0", left: "0" }}>

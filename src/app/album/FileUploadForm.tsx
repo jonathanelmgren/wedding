@@ -6,11 +6,36 @@ import { useState } from "react";
 import { useFormStatus } from "react-dom";
 
 const PHOTO_EXTENSIONS = [
-  "avif", "bmp", "gif", "heic", "ico", "jpg", "jpeg", "png", "tiff", "webp", "raw"
+  "avif",
+  "bmp",
+  "gif",
+  "heic",
+  "ico",
+  "jpg",
+  "jpeg",
+  "png",
+  "tiff",
+  "webp",
+  "raw",
 ];
 const VIDEO_EXTENSIONS = [
-  "3gp", "3g2", "asf", "avi", "divx", "m2t", "m2ts", "m4v", "mkv", "mmv", "mod",
-  "mov", "mp4", "mpg", "mts", "tod", "wmv"
+  "3gp",
+  "3g2",
+  "asf",
+  "avi",
+  "divx",
+  "m2t",
+  "m2ts",
+  "m4v",
+  "mkv",
+  "mmv",
+  "mod",
+  "mov",
+  "mp4",
+  "mpg",
+  "mts",
+  "tod",
+  "wmv",
 ];
 
 const MAX_PHOTO_SIZE = 200 * 1024 * 1024; // 200 MB
@@ -24,14 +49,16 @@ interface FileValidationResult {
 
 const validateFile = (file: File): FileValidationResult => {
   const extension = file.name.split(".").pop()?.toLowerCase() || "";
-  const isValidType = [...PHOTO_EXTENSIONS, ...VIDEO_EXTENSIONS].includes(extension);
-  const isValidSize = PHOTO_EXTENSIONS.includes(extension) 
-    ? file.size <= MAX_PHOTO_SIZE 
+  const isValidType = [...PHOTO_EXTENSIONS, ...VIDEO_EXTENSIONS].includes(
+    extension,
+  );
+  const isValidSize = PHOTO_EXTENSIONS.includes(extension)
+    ? file.size <= MAX_PHOTO_SIZE
     : file.size <= MAX_VIDEO_SIZE;
 
   return {
     isValid: isValidType && isValidSize,
-    isLarge: file.size > LARGE_FILE_THRESHOLD
+    isLarge: file.size > LARGE_FILE_THRESHOLD,
   };
 };
 
@@ -45,8 +72,9 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({ user }) => {
 
   const formAction = async (formData: FormData) => {
     sendEventToGA("submit", "file-upload", "upload", user);
-    const files = Array.from(formData.getAll("files"))
-      .filter((file): file is File => file instanceof File && file.name !== "");
+    const files = Array.from(formData.getAll("files")).filter(
+      (file): file is File => file instanceof File && file.name !== "",
+    );
 
     if (files.length === 0) {
       setStateMessage("Inga filer valda");
@@ -56,7 +84,7 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({ user }) => {
     const validFiles: File[] = [];
     let largeFileWarningMsg = "";
 
-    files.forEach(file => {
+    files.forEach((file) => {
       const { isValid, isLarge } = validateFile(file);
       if (isValid) {
         validFiles.push(file);
@@ -67,7 +95,8 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({ user }) => {
     });
 
     if (validFiles.length !== files.length) {
-      largeFileWarningMsg += "Några filer har antingen fel filtyp eller är för stor. Du kan fortfarande ladda upp de andra filerna. ";
+      largeFileWarningMsg +=
+        "Några filer har antingen fel filtyp eller är för stor. Du kan fortfarande ladda upp de andra filerna. ";
     }
 
     setLargeFilesWarning(largeFileWarningMsg);
@@ -78,13 +107,15 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({ user }) => {
     }
 
     const uploadData = new FormData();
-    validFiles.forEach(file => uploadData.append('files', file));
+    validFiles.forEach((file) => uploadData.append("files", file));
 
     const { failureCount, successCount } = await uploadImages(uploadData);
     setStateMessage(
-      failureCount === 0 ? "Allt laddades upp korrekt" :
-      successCount === 0 ? "Något gick fel. Kunde ej ladda upp media" :
-      `${successCount} media uppladdade, ${failureCount} media kunde ej laddas upp`
+      failureCount === 0
+        ? "Allt laddades upp korrekt"
+        : successCount === 0
+          ? "Något gick fel. Kunde ej ladda upp media"
+          : `${successCount} media uppladdade, ${failureCount} media kunde ej laddas upp`,
     );
   };
 

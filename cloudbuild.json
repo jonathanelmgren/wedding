@@ -1,0 +1,18 @@
+{
+  "availableSecrets": {
+    "secretManager": [
+      {
+        "versionName": "projects/wedding-410109/secrets/CLIENT_ID/versions/1",
+        "env": "CLIENT_ID"
+      },
+      {
+        "versionName": "projects/wedding-410109/secrets/CLIENT_SECRET/versions/1",
+        "env": "CLIENT_SECRET"
+      },
+      {
+        "versionName": "projects/wedding-410109/secrets/REFRESH_TOKEN/versions/1",
+        "env": "REFRESH_TOKEN"
+      }
+    ]
+  }
+}

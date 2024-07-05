@@ -1,4 +1,8 @@
 steps:
+  # Distinctive step to verify cloudbuild.yaml is being read
+  - name: 'gcr.io/cloud-builders/echo'
+    args: ['CLOUDBUILD_YAML_IS_BEING_READ']
+
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
     args:
@@ -6,11 +10,11 @@ steps:
       - '-t'
       - 'gcr.io/$PROJECT_ID/wedding-planner-app'
       - '--build-arg'
-      - 'REFRESH_TOKEN=$$_REFRESH_TOKEN'
+      - 'REFRESH_TOKEN=${_REFRESH_TOKEN}'
       - '--build-arg'
-      - 'CLIENT_ID=$$_CLIENT_ID'
+      - 'CLIENT_ID=${_CLIENT_ID}'
       - '--build-arg'
-      - 'CLIENT_SECRET=$$_CLIENT_SECRET'
+      - 'CLIENT_SECRET=${_CLIENT_SECRET}'
       - '.'
     secretEnv: ['_REFRESH_TOKEN', '_CLIENT_ID', '_CLIENT_SECRET']
 

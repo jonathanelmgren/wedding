@@ -39,6 +39,7 @@ const ScrollToLastViewedModal: React.FC<ScrollToLastViewedModalProps> = ({
   }, [onClose]);
 
   const handleYes = () => {
+    setClosed(true);
     scrollToLastViewed();
     onClose();
   };

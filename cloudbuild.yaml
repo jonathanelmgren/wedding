@@ -39,9 +39,9 @@ images:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/657230830195/secrets/REFRESH_TOKEN
+    - versionName: projects/657230830195/secrets/REFRESH_TOKEN/versions/latest
       env: 'REFRESH_TOKEN'
-    - versionName: projects/657230830195/secrets/CLIENT_ID
+    - versionName: projects/657230830195/secrets/CLIENT_ID/versions/latest
       env: 'CLIENT_ID'
-    - versionName: projects/657230830195/secrets/CLIENT_SECRET
+    - versionName: projects/657230830195/secrets/CLIENT_SECRET/versions/latest
       env: 'CLIENT_SECRET'

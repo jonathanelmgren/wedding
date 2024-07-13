@@ -9,12 +9,12 @@ steps:
           --build-arg REFRESH_TOKEN="$${REFRESH_TOKEN}" \
           --build-arg CLIENT_ID="$${CLIENT_ID}" \
           --build-arg CLIENT_SECRET="$${CLIENT_SECRET}" \
-          -t gcr.io/$PROJECT_ID/wedding-planner-app .
+          -t gcr.io/$PROJECT_ID/wedding-photos .
     secretEnv: ['REFRESH_TOKEN', 'CLIENT_ID', 'CLIENT_SECRET']
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/wedding-planner-app']
+    args: ['push', 'gcr.io/$PROJECT_ID/wedding-photos']
 
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,9 +22,9 @@ steps:
     args:
     - 'run'
     - 'deploy'
-    - 'wedding-planner-app'
+    - 'wedding-photos'
     - '--image'
-    - 'gcr.io/$PROJECT_ID/wedding-planner-app'
+    - 'gcr.io/$PROJECT_ID/wedding-photos'
     - '--region'
     - 'us-central1'  # replace with your preferred region
     - '--platform'
@@ -32,14 +32,15 @@ steps:
     - '--allow-unauthenticated'
     - '--set-secrets=REFRESH_TOKEN=REFRESH_TOKEN:latest,CLIENT_ID=CLIENT_ID:latest,CLIENT_SECRET=CLIENT_SECRET:latest'
 
+
 images:
-  - 'gcr.io/$PROJECT_ID/wedding-planner-app'
+  - 'gcr.io/$PROJECT_ID/wedding-photos'
 
 availableSecrets:
   secretManager:
-    - versionName: projects/wedding-410109/secrets/REFRESH_TOKEN/versions/latest
+    - versionName: projects/657230830195/secrets/REFRESH_TOKEN
       env: 'REFRESH_TOKEN'
-    - versionName: projects/wedding-410109/secrets/CLIENT_ID/versions/latest
+    - versionName: projects/657230830195/secrets/CLIENT_ID
       env: 'CLIENT_ID'
-    - versionName: projects/wedding-410109/secrets/CLIENT_SECRET/versions/latest
+    - versionName: projects/657230830195/secrets/CLIENT_SECRET
       env: 'CLIENT_SECRET'

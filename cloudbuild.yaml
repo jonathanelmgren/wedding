@@ -9,12 +9,12 @@ steps:
           --build-arg REFRESH_TOKEN="$${REFRESH_TOKEN}" \
           --build-arg CLIENT_ID="$${CLIENT_ID}" \
           --build-arg CLIENT_SECRET="$${CLIENT_SECRET}" \
-          -t gcr.io/$PROJECT_ID/wedding-photos .
+          -t gcr.io/$PROJECT_ID/wedding .
     secretEnv: ['REFRESH_TOKEN', 'CLIENT_ID', 'CLIENT_SECRET']
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/wedding-photos']
+    args: ['push', 'gcr.io/$PROJECT_ID/wedding']
 
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -22,11 +22,11 @@ steps:
     args:
     - 'run'
     - 'deploy'
-    - 'wedding-photos'
+    - 'wedding'
     - '--image'
-    - 'gcr.io/$PROJECT_ID/wedding-photos'
+    - 'gcr.io/$PROJECT_ID/wedding'
     - '--region'
-    - 'us-central1'  # replace with your preferred region
+    - 'europe-north1'
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated'
@@ -35,7 +35,7 @@ steps:
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 images:
-  - 'gcr.io/$PROJECT_ID/wedding-photos'
+  - 'gcr.io/$PROJECT_ID/wedding'
 
 availableSecrets:
   secretManager:

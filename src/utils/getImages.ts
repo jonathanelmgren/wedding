@@ -4,11 +4,14 @@ import { refreshAccessToken } from "./googleAuth";
 
 const PAGE_SIZE = 100;
 
+let allImages: WeddingImage[] = [];
+
 export const getImages = async (): Promise<WeddingImage[] | undefined> => {
   const accessToken = await refreshAccessToken();
   if (!accessToken) return;
 
-  let allImages: WeddingImage[] = [];
+  if (allImages.length > 0) return allImages;
+
   let nextPageToken: string | undefined = undefined;
 
   do {

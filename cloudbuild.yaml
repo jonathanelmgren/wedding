@@ -32,7 +32,8 @@ steps:
     - '--allow-unauthenticated'
     - '--set-secrets=REFRESH_TOKEN=REFRESH_TOKEN:latest,CLIENT_ID=CLIENT_ID:latest,CLIENT_SECRET=CLIENT_SECRET:latest'
 
-
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 images:
   - 'gcr.io/$PROJECT_ID/wedding-photos'
 

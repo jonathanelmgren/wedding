@@ -1,13 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { AutoScrollButton } from "@/components/AutoScrollButton";
 import ImageComponent from "@/components/Image";
-import { LastViewedProvider } from "@/components/LastViewedProvider";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-import { getImages } from "@/utils/getImages";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
+import { WeddingImage } from "ts/types";
 import { FileUploadForm } from "./FileUploadForm";
 
 const Page = () => {
@@ -26,7 +25,6 @@ const Page = () => {
 
   return (
     <PageViewTracker user={user}>
-      <LastViewedProvider>
         <div className="relative min-h-screen">
           <div
             className="absolute inset-0 -z-10 opacity-20"
@@ -49,22 +47,33 @@ const Page = () => {
           </div>
           <ScrollToTopButton />
         </div>
-      </LastViewedProvider>
     </PageViewTracker>
   );
 };
 
 const ImageFetcher = async ({ user }: { user: string }) => {
-  const imgResponse = await getImages();
+  const headerList = headers();
+  const baseUrl = headerList.get("x-origin");
+  const imgResponse = await fetch(`${baseUrl}/api/photos`).catch(e => undefined);
+  const imgs: WeddingImage[] | undefined = await imgResponse?.json();
 
-  if (!imgResponse) {
+  if (!imgs) {
     return <div>Kunde ej hämta bilder, vänligen kontakta Jonathan</div>;
   }
 
-  return imgResponse.map((img) => (
+  return imgs.map((img, index) => (
+    <>
+    {index > 0 && index % 50 === 0 && (
+      <div className="w-full text-center flex items-center">
+<hr className="flex-grow mx-4" />
+<h6 className="text-[3rem] text-primary">{index} / {imgs.length}</h6>
+<hr className="flex-grow mx-4" />
+</div>
+        )}
     <div key={img.filename} data-filename={img.filename} className="px-4">
       <ImageComponent img={img} user={user} />
     </div>
+          </>
   ));
 };
 

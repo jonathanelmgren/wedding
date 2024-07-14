@@ -5,14 +5,12 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
-  useState,
+  useEffect
 } from "react";
 import ScrollToLastViewedModal from "./ScrollToLastviewedModal";
 
 interface LastViewedContextType {
   scrollToLastViewed: () => void;
-  updateImageLoaded: () => void;
 }
 
 const LastViewedContext = createContext<LastViewedContextType | undefined>(
@@ -48,13 +46,7 @@ const scrollToLastViewed = () => {
 export const LastViewedProvider: React.FC<LastViewedProviderProps> = ({
   children,
 }) => {
-  const [imgLoaded, setImgLoaded] = useState(false);
   const lastViewed = getLocalStorage()?.getItem("lastViewed") ?? null;
-  const updateImageLoaded = () => {
-    if (!imgLoaded) {
-      setImgLoaded(true);
-    }
-  };
 
   const updateLastViewed = useCallback((filename: string) => {
     getLocalStorage()?.setItem("lastViewed", filename);
@@ -94,10 +86,9 @@ export const LastViewedProvider: React.FC<LastViewedProviderProps> = ({
     <LastViewedContext.Provider
       value={{
         scrollToLastViewed,
-        updateImageLoaded,
       }}
     >
-      {lastViewed && imgLoaded && (
+      {lastViewed && (
         <ScrollToLastViewedModal onClose={removeLastViewed} />
       )}
       {children}

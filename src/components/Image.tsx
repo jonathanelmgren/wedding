@@ -3,7 +3,6 @@ import { sendEventToGA } from "@/utils/sendEventToGA";
 import { useEffect, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
 import { WeddingImage } from "ts/types";
-import { useLastViewed } from "./LastViewedProvider";
 
 const Spinner = () => (
   <div
@@ -19,7 +18,6 @@ const Spinner = () => (
 const Image = ({ img, user }: { img: WeddingImage; user: string }) => {
   const [fullSize, setFullSize] = useState(false);
   const [fullSizeLoaded, setFullSizeLoaded] = useState(false);
-  const { updateImageLoaded } = useLastViewed();
 
   useEffect(() => {
     if (fullSize) {
@@ -46,14 +44,13 @@ const Image = ({ img, user }: { img: WeddingImage; user: string }) => {
   return (
     <>
       <img
-        className="cursor-pointer w-full"
+        className="cursor-pointer w-full max-h-[99vh] max-w-[99vw]"
         onClick={handleClick}
         src={img.thumbnail.url}
         srcSet={`${img.thumbnail.url} 480w, ${img.thumbnailDesktop.url} 1024w`}
         sizes="(max-width: 600px) 480px, 1024px"
         alt={"alt"}
         loading="lazy"
-        onLoad={() => updateImageLoaded()}
       />
       {fullSize && (
         <div

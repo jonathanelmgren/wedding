@@ -2,7 +2,6 @@
 import { sendEventToGA } from "@/utils/sendEventToGA";
 import { useEffect, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
-import { redirect } from "next/navigation";
 import { WeddingImage } from "ts/types";
 import { useUser } from "./UserProvider";
 
@@ -34,12 +33,8 @@ const Image = ({ img }: { img: WeddingImage; }) => {
     };
   }, [fullSize]);
 
-  if (!user) {
-    redirect("/login");
-  }
-
   const handleClick = () => {
-    sendEventToGA("image|click", user, "filename", img.filename);
+    sendEventToGA("image|click", user ?? '', "filename", img.filename);
     setFullSize(true);
   };
 

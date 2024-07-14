@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -9,6 +10,23 @@ export function middleware(request: NextRequest) {
   response.headers.set('x-pathname-search', search);
   response.headers.set('x-origin', origin);
   response.headers.set('x-url', href);
+
+  if(pathname === '/album'){
+    const cookieStore = cookies();
+    const tokenCookie = cookieStore.get("token");
+  
+    if (!tokenCookie) {
+      return NextResponse.rewrite(new URL('/login', request.url))
+    }
+  
+    const user = cookieStore.get("user")?.value;
+  
+    if (!user) {
+      return NextResponse.rewrite(new URL('/login', request.url))
+    }
+  
+  }
+  console.log('middleware', pathname);
 
   return response;
 }

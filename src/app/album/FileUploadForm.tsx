@@ -3,7 +3,6 @@
 import { useUser } from "@/components/UserProvider";
 import { sendEventToGA } from "@/utils/sendEventToGA";
 import { uploadImages } from "@/utils/uploadImages";
-import { redirect } from "next/navigation";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -69,12 +68,9 @@ export const FileUploadForm: React.FC = () => {
   const [stateMessage, setStateMessage] = useState<string>("");
   const [largeFilesWarning, setLargeFilesWarning] = useState<string>("");
 
-  if (!user) {
-    redirect("/login");
-  }
 
   const formAction = async (formData: FormData) => {
-    sendEventToGA("submit", "file-upload", "upload", user);
+    sendEventToGA("submit", "file-upload", "upload", user ?? "unknown");
     const files = Array.from(formData.getAll("files")).filter(
       (file): file is File => file instanceof File && file.name !== "",
     );

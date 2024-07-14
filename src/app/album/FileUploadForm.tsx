@@ -1,7 +1,9 @@
 "use client";
 
+import { useUser } from "@/components/UserProvider";
 import { sendEventToGA } from "@/utils/sendEventToGA";
 import { uploadImages } from "@/utils/uploadImages";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -62,13 +64,14 @@ const validateFile = (file: File): FileValidationResult => {
   };
 };
 
-interface FileUploadFormProps {
-  user: string;
-}
-
-export const FileUploadForm: React.FC<FileUploadFormProps> = ({ user }) => {
+export const FileUploadForm: React.FC = () => {
+  const {user} = useUser();
   const [stateMessage, setStateMessage] = useState<string>("");
   const [largeFilesWarning, setLargeFilesWarning] = useState<string>("");
+
+  if (!user) {
+    redirect("/login");
+  }
 
   const formAction = async (formData: FormData) => {
     sendEventToGA("submit", "file-upload", "upload", user);

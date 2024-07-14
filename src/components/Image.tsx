@@ -2,7 +2,9 @@
 import { sendEventToGA } from "@/utils/sendEventToGA";
 import { useEffect, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
+import { redirect } from "next/navigation";
 import { WeddingImage } from "ts/types";
+import { useUser } from "./UserProvider";
 
 const Spinner = () => (
   <div
@@ -15,9 +17,10 @@ const Spinner = () => (
   </div>
 );
 
-const Image = ({ img, user }: { img: WeddingImage; user: string }) => {
+const Image = ({ img }: { img: WeddingImage; }) => {
   const [fullSize, setFullSize] = useState(false);
   const [fullSizeLoaded, setFullSizeLoaded] = useState(false);
+  const {user} = useUser()
 
   useEffect(() => {
     if (fullSize) {
@@ -31,6 +34,10 @@ const Image = ({ img, user }: { img: WeddingImage; user: string }) => {
     };
   }, [fullSize]);
 
+  if (!user) {
+    redirect("/login");
+  }
+
   const handleClick = () => {
     sendEventToGA("image|click", user, "filename", img.filename);
     setFullSize(true);
@@ -40,6 +47,8 @@ const Image = ({ img, user }: { img: WeddingImage; user: string }) => {
     e.stopPropagation();
     setFullSize(false);
   };
+
+  if(!user) return <>Du har inte behörighet att se dessa bilder.</>
 
   return (
     <>

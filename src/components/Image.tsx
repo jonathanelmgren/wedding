@@ -43,8 +43,6 @@ const Image = ({ img }: { img: WeddingImage; }) => {
     setFullSize(false);
   };
 
-  if(!user) return <>Du har inte behörighet att se dessa bilder.</>
-
   return (
     <>
       <img

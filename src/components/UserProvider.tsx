@@ -16,7 +16,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<string | null>(null);
 
   useEffect(() => {
-    const userCookie = Cookies.get('user') ?? '';
+    const userCookie = Cookies.get('user');
     if (userCookie) {
       setUser(userCookie);
     }

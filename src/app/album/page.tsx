@@ -4,15 +4,15 @@ import ImageComponent from "@/components/Image";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { UserProvider } from "@/components/UserProvider";
-import { getImages } from "@/utils/getImages";
+import { headers } from "next/headers";
 import { Suspense } from "react";
+import { WeddingImage } from "ts/types";
 import { FileUploadForm } from "./FileUploadForm";
 
 const Page = () => {
-
   return (
     <UserProvider>
-    <PageViewTracker>
+      <PageViewTracker>
         <div className="relative min-h-screen">
           <div
             className="absolute inset-0 -z-10 opacity-20"
@@ -35,31 +35,38 @@ const Page = () => {
           </div>
           <ScrollToTopButton />
         </div>
-    </PageViewTracker>
+      </PageViewTracker>
     </UserProvider>
   );
 };
 
 const ImageFetcher = async () => {
-  const imgResponse = await getImages();
+  const headerList = headers();
+  const baseUrl = headerList.get("x-origin");
+  const imgResponse = await fetch(`${baseUrl}/api/photos`).catch(
+    (e) => undefined,
+  );
+  const imgs: WeddingImage[] | undefined = await imgResponse?.json();
 
-  if (!imgResponse) {
-    return <div>Kunde ej hämta bilder, vänligen kontakta Jonathan</div>;
+  if (!imgs) {
+    return <div>Kunde ej hämta bilder, vänligen kontakta Jonathan</div>;  
   }
 
-  return imgResponse.map((img, index) => (
+  return imgs.map((img, index) => (
     <>
-    {index > 0 && index % 50 === 0 && (
-      <div className="w-full text-center flex items-center">
-<hr className="flex-grow mx-4" />
-<h6 className="text-[3rem] text-primary">{index} / {imgResponse.length}</h6>
-<hr className="flex-grow mx-4" />
-</div>
-        )}
-    <div key={img.filename} data-filename={img.filename} className="px-4">
-      <ImageComponent img={img} />
-    </div>
-          </>
+      {index > 0 && index % 50 === 0 && (
+        <div className="w-full text-center flex items-center">
+          <hr className="flex-grow mx-4" />
+          <h6 className="text-[3rem] text-primary">
+            {index} / {imgs.length}
+          </h6>
+          <hr className="flex-grow mx-4" />
+        </div>
+      )}
+      <div key={img.filename} data-filename={img.filename} className="px-4 min-h-28 md:min-h-80">
+        <ImageComponent img={img} />
+      </div>
+    </>
   ));
 };
 

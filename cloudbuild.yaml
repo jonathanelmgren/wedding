@@ -1,47 +1,47 @@
 steps:
   # Access secrets and pass them as build args
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
+  - name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
     args:
-      - '-c'
+      - "-c"
       - |
         docker build \
           --build-arg REFRESH_TOKEN="$${REFRESH_TOKEN}" \
           --build-arg CLIENT_ID="$${CLIENT_ID}" \
           --build-arg CLIENT_SECRET="$${CLIENT_SECRET}" \
           -t gcr.io/$PROJECT_ID/wedding .
-    secretEnv: ['REFRESH_TOKEN', 'CLIENT_ID', 'CLIENT_SECRET']
+    secretEnv: ["REFRESH_TOKEN", "CLIENT_ID", "CLIENT_SECRET"]
 
   # Push the container image to Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/wedding']
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/wedding"]
 
   # Deploy container image to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     entrypoint: gcloud
     args:
-    - 'run'
-    - 'deploy'
-    - 'wedding'
-    - '--image'
-    - 'gcr.io/$PROJECT_ID/wedding'
-    - '--region'
-    - 'europe-north1'
-    - '--platform'
-    - 'managed'
-    - '--allow-unauthenticated'
-    - '--set-secrets=REFRESH_TOKEN=REFRESH_TOKEN:latest,CLIENT_ID=CLIENT_ID:latest,CLIENT_SECRET=CLIENT_SECRET:latest'
+      - "run"
+      - "deploy"
+      - "wedding"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/wedding"
+      - "--region"
+      - "europe-north1"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--set-secrets=REFRESH_TOKEN=REFRESH_TOKEN:latest,CLIENT_ID=CLIENT_ID:latest,CLIENT_SECRET=CLIENT_SECRET:latest"
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 images:
-  - 'gcr.io/$PROJECT_ID/wedding'
+  - "gcr.io/$PROJECT_ID/wedding"
 
 availableSecrets:
   secretManager:
     - versionName: projects/657230830195/secrets/REFRESH_TOKEN/versions/latest
-      env: 'REFRESH_TOKEN'
+      env: "REFRESH_TOKEN"
     - versionName: projects/657230830195/secrets/CLIENT_ID/versions/latest
-      env: 'CLIENT_ID'
+      env: "CLIENT_ID"
     - versionName: projects/657230830195/secrets/CLIENT_SECRET/versions/latest
-      env: 'CLIENT_SECRET'
+      env: "CLIENT_SECRET"

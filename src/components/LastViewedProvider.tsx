@@ -5,7 +5,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect
+  useEffect,
 } from "react";
 import ScrollToLastViewedModal from "./ScrollToLastviewedModal";
 
@@ -88,9 +88,7 @@ export const LastViewedProvider: React.FC<LastViewedProviderProps> = ({
         scrollToLastViewed,
       }}
     >
-      {lastViewed && (
-        <ScrollToLastViewedModal onClose={removeLastViewed} />
-      )}
+      {lastViewed && <ScrollToLastViewedModal onClose={removeLastViewed} />}
       {children}
     </LastViewedContext.Provider>
   );

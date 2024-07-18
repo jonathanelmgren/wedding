@@ -64,10 +64,9 @@ const validateFile = (file: File): FileValidationResult => {
 };
 
 export const FileUploadForm: React.FC = () => {
-  const {user} = useUser();
+  const { user } = useUser();
   const [stateMessage, setStateMessage] = useState<string>("");
   const [largeFilesWarning, setLargeFilesWarning] = useState<string>("");
-
 
   const formAction = async (formData: FormData) => {
     sendEventToGA("submit", "file-upload", "upload", user ?? "unknown");

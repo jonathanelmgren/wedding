@@ -1,5 +1,5 @@
 "use server";
-import { GoogleImagesResponse, WeddingImage } from "ts/types";
+import { GoogleImage, GoogleImagesResponse, WeddingImage } from "ts/types";
 import { refreshAccessToken } from "./googleAuth";
 
 const PAGE_SIZE = 100;
@@ -55,7 +55,7 @@ const fetchImagesPage = async (
     return {
       pagination: json.nextPageToken,
       images: mediaItems.map((item) => {
-        const { baseUrl, filename, mediaMetadata } = item;
+        const { baseUrl, filename, mediaMetadata, id, mimeType } = item;
         const { width, height } = mediaMetadata;
         const aspectRatio = parseFloat(width) / parseFloat(height);
 
@@ -85,9 +85,64 @@ const fetchImagesPage = async (
             height: thumbnailDesktopHeight,
           },
           filename,
+          id,
+          mimeType
         };
       }),
     };
   }
   return undefined;
+};
+
+export const fetchGoogleImageById = async (
+  id: string,
+): Promise<WeddingImage | undefined> => {
+  const accessToken = await refreshAccessToken();
+  if (!accessToken) return;
+  const res = await fetch(
+    `https://photoslibrary.googleapis.com/v1/mediaItems/${id}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  if (res.ok) {
+    const item: GoogleImage = await res.json();
+    const { baseUrl, filename, mediaMetadata, id, mimeType } = item;
+    const { width, height } = mediaMetadata;
+    const aspectRatio = parseFloat(width) / parseFloat(height);
+
+    const fullSizeWidth = 1920;
+    const thumbnailWidth = 600;
+    const thumbnailDesktopWidth = 1200;
+
+    const thumbnailHeight = Math.round(thumbnailWidth / aspectRatio);
+    const fullSizeHeight = Math.round(fullSizeWidth / aspectRatio);
+    const thumbnailDesktopHeight = Math.round(
+      thumbnailDesktopWidth / aspectRatio,
+    );
+    return {
+      default: {
+        url: `${baseUrl}=w${fullSizeWidth}`,
+        width: fullSizeWidth,
+        height: fullSizeHeight,
+      },
+      thumbnail: {
+        url: `${baseUrl}=w${thumbnailWidth}`,
+        width: thumbnailWidth,
+        height: thumbnailHeight,
+      },
+      thumbnailDesktop: {
+        url: `${baseUrl}=w${thumbnailDesktopWidth}`,
+        width: thumbnailDesktopWidth,
+        height: thumbnailDesktopHeight,
+      },
+      filename,
+      id,
+      mimeType
+    };
+  }
 };

@@ -36,4 +36,6 @@ export type WeddingImage = {
     height: number;
   };
   filename: string;
+  id: string;
+  mimeType: string;
 };

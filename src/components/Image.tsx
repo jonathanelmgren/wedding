@@ -16,10 +16,10 @@ const Spinner = () => (
   </div>
 );
 
-const Image = ({ img }: { img: WeddingImage; }) => {
+const Image = ({ img }: { img: WeddingImage }) => {
   const [fullSize, setFullSize] = useState(false);
   const [fullSizeLoaded, setFullSizeLoaded] = useState(false);
-  const {user} = useUser()
+  const { user } = useUser();
 
   useEffect(() => {
     if (fullSize) {
@@ -34,7 +34,7 @@ const Image = ({ img }: { img: WeddingImage; }) => {
   }, [fullSize]);
 
   const handleClick = () => {
-    sendEventToGA("image|click", user ?? '', "filename", img.filename);
+    sendEventToGA("image|click", user ?? "", "filename", img.filename);
     setFullSize(true);
   };
 
@@ -43,16 +43,20 @@ const Image = ({ img }: { img: WeddingImage; }) => {
     setFullSize(false);
   };
 
+  const proxyUrl = (desktop:boolean, thumbnail:boolean) => `/api/photos/${img.id}?thumbnail=${thumbnail ? 'true' : 'false'}&desktop=${desktop ? 'true' : 'false'}`;
+
   return (
     <>
       <img
         className="cursor-pointer w-full max-h-[99vh] max-w-[99vw]"
         onClick={handleClick}
         src={img.thumbnail.url}
-        srcSet={`${img.thumbnail.url} 480w, ${img.thumbnailDesktop.url} 1024w`}
+        srcSet={`${proxyUrl(false,true)} 480w, ${proxyUrl(true,true)} 1024w`}
         sizes="(max-width: 600px) 480px, 1024px"
         alt={"alt"}
         loading="lazy"
+        width={img.thumbnailDesktop.width}
+        height={img.thumbnailDesktop.height}
       />
       {fullSize && (
         <div
@@ -68,7 +72,7 @@ const Image = ({ img }: { img: WeddingImage; }) => {
             }
             onLoad={() => setFullSizeLoaded(true)}
             loading="eager"
-            src={img.default.url}
+            src={proxyUrl(true,false)}
             width={img.default.width}
             height={img.default.height}
             alt={"alt"}

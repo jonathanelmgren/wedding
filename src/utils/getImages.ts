@@ -6,10 +6,6 @@ const PAGE_SIZE = 100;
 
 let allImages: WeddingImage[] = [];
 
-setInterval(() => {
-  allImages = [];
-}, 1000 * 60 * 60);
-
 export const getImages = async (): Promise<WeddingImage[] | undefined> => {
   const accessToken = await refreshAccessToken();
   if (!accessToken) return;

@@ -2,6 +2,7 @@
 import { sendEventToGA } from "@/utils/sendEventToGA";
 import { useEffect, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
+import NextImage from "next/image";
 import { WeddingImage } from "ts/types";
 import { Spinner } from "./Spinner";
 import { useUser } from "./UserProvider";
@@ -34,16 +35,15 @@ const Image = ({ img }: { img: WeddingImage }) => {
     setFullSize(false);
   };
 
+  const proxyUrl = (fullsize: boolean) =>  `/api/image?id=${img.id}&fullsize=${fullsize}`;
+
   return (
     <>
-      <img
+      <NextImage
         className="cursor-pointer w-full max-h-[99vh] max-w-[99vw]"
         onClick={handleClick}
-        src={img.thumbnail.url}
-        srcSet={`${img.thumbnail.url} 480w, ${img.thumbnailDesktop.url} 1024w`}
-        sizes="(max-width: 600px) 480px, 1024px"
+        src={proxyUrl(false)}
         alt={"alt"}
-        loading="lazy"
         width={img.thumbnailDesktop.width}
         height={img.thumbnailDesktop.height}
         onLoad={() => setLoaded(true)}
@@ -55,7 +55,7 @@ const Image = ({ img }: { img: WeddingImage }) => {
           onClick={handleClose}
         >
           {!fullSizeLoaded && <Spinner />}
-          <img
+          <NextImage
             className={
               fullSizeLoaded
                 ? "block max-w-full max-h-full object-contain"
@@ -63,7 +63,7 @@ const Image = ({ img }: { img: WeddingImage }) => {
             }
             onLoad={() => setFullSizeLoaded(true)}
             loading="eager"
-            src={img.default.url}
+            src={proxyUrl(true)}
             width={img.default.width}
             height={img.default.height}
             alt={"alt"}

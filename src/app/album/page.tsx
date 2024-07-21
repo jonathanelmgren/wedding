@@ -10,6 +10,8 @@ import { Suspense } from "react";
 import { WeddingImage } from "ts/types";
 import { FileUploadForm } from "./FileUploadForm";
 
+export const dynamic = 'force-dynamic'
+
 const Page = () => {
   return (
     <UserProvider>
@@ -43,6 +45,7 @@ const Page = () => {
 
 const ImageFetcher = async () => {
   const imgs: WeddingImage[] | undefined = await getImages();
+  console.log('here: ', imgs?.length)
 
   if (!imgs) {
     return <div>Kunde ej hämta bilder, vänligen kontakta Jonathan</div>;  

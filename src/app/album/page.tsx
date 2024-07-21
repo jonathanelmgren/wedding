@@ -3,8 +3,9 @@ import { AutoScrollButton } from "@/components/AutoScrollButton";
 import ImageComponent from "@/components/Image";
 import { PageViewTracker } from "@/components/PageViewTracker";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { Spinner } from "@/components/Spinner";
 import { UserProvider } from "@/components/UserProvider";
-import { headers } from "next/headers";
+import { getImages } from "@/utils/getImages";
 import { Suspense } from "react";
 import { WeddingImage } from "ts/types";
 import { FileUploadForm } from "./FileUploadForm";
@@ -28,7 +29,7 @@ const Page = () => {
             <FileUploadForm />
             <div className="z-0 mx-auto w-full flex flex-col items-center gap-8 m-12 scroll-smooth">
               <AutoScrollButton />
-              <Suspense fallback={<>Laddar alla bilder....</>}>
+              <Suspense fallback={<div className="flex flex-col items-center gap-8">Laddar alla bilder... Detta kan ta någon minut<Spinner/></div>}>
                 <ImageFetcher />
               </Suspense>
             </div>
@@ -41,12 +42,7 @@ const Page = () => {
 };
 
 const ImageFetcher = async () => {
-  const headerList = headers();
-  const baseUrl = headerList.get("x-origin");
-  const imgResponse = await fetch(`${baseUrl}/api/photos`).catch(
-    (e) => undefined,
-  );
-  const imgs: WeddingImage[] | undefined = await imgResponse?.json();
+  const imgs: WeddingImage[] | undefined = await getImages();
 
   if (!imgs) {
     return <div>Kunde ej hämta bilder, vänligen kontakta Jonathan</div>;  

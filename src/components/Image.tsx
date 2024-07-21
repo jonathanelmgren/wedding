@@ -3,23 +3,14 @@ import { sendEventToGA } from "@/utils/sendEventToGA";
 import { useEffect, useState } from "react";
 /* eslint-disable @next/next/no-img-element */
 import { WeddingImage } from "ts/types";
+import { Spinner } from "./Spinner";
 import { useUser } from "./UserProvider";
-
-const Spinner = () => (
-  <div
-    className="text-primary max-w-16 max-h-16 inline-block h-[40vh] w-[40vw] animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-    role="status"
-  >
-    <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-      Loading...
-    </span>
-  </div>
-);
 
 const Image = ({ img }: { img: WeddingImage }) => {
   const [fullSize, setFullSize] = useState(false);
   const [fullSizeLoaded, setFullSizeLoaded] = useState(false);
   const { user } = useUser();
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (fullSize) {
@@ -43,21 +34,21 @@ const Image = ({ img }: { img: WeddingImage }) => {
     setFullSize(false);
   };
 
-  const proxyUrl = (desktop:boolean, thumbnail:boolean) => `/api/photos/${img.id}?thumbnail=${thumbnail ? 'true' : 'false'}&desktop=${desktop ? 'true' : 'false'}`;
-
   return (
     <>
       <img
         className="cursor-pointer w-full max-h-[99vh] max-w-[99vw]"
         onClick={handleClick}
         src={img.thumbnail.url}
-        srcSet={`${proxyUrl(false,true)} 480w, ${proxyUrl(true,true)} 1024w`}
+        srcSet={`${img.thumbnail.url} 480w, ${img.thumbnailDesktop.url} 1024w`}
         sizes="(max-width: 600px) 480px, 1024px"
         alt={"alt"}
         loading="lazy"
         width={img.thumbnailDesktop.width}
         height={img.thumbnailDesktop.height}
+        onLoad={() => setLoaded(true)}
       />
+      {!loaded && <Spinner />}
       {fullSize && (
         <div
           className="bg-black bg-opacity-40 fixed inset-0 flex items-center justify-center w-full h-full z-50"
@@ -72,7 +63,7 @@ const Image = ({ img }: { img: WeddingImage }) => {
             }
             onLoad={() => setFullSizeLoaded(true)}
             loading="eager"
-            src={proxyUrl(true,false)}
+            src={img.default.url}
             width={img.default.width}
             height={img.default.height}
             alt={"alt"}
